@@ -8,7 +8,15 @@ This guide walks through a local stdio setup for `arxiv-consensus-mcp`.
 - An MCP client that can launch a local stdio server.
 - Optional: a Consensus API key if you want Consensus results in addition to arXiv.
 
-## Install
+## Install From GitHub
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+pip install "git+https://github.com/haegyung/arxiv-consensus-mcp.git"
+```
+
+## Install From A Clone
 
 ```bash
 git clone https://github.com/haegyung/arxiv-consensus-mcp.git
@@ -87,3 +95,34 @@ If `CONSENSUS_API_KEY` is missing or invalid:
 - the Consensus part of the combined response reports its own API failure under `source_results.consensus`.
 
 This lets a research workflow degrade gracefully instead of failing the whole collection run.
+
+## Verify The Install
+
+Run an import smoke:
+
+```bash
+python - <<'PY'
+from arxiv_consensus_mcp.server import arxiv_consensus_surface
+surface = arxiv_consensus_surface()
+print(surface["ok"], surface["mcp_server"], surface["transport"])
+PY
+```
+
+Expected output:
+
+```text
+True Arxiv_Consensus_MCP stdio
+```
+
+If you installed from a clone, you can also run:
+
+```bash
+python -m unittest discover -s tests
+```
+
+## Troubleshooting
+
+- `ModuleNotFoundError`: activate the same virtualenv where you installed the package.
+- MCP client launch failure: use the absolute path to `.venv/bin/python` in the MCP client config.
+- Consensus `401` or `403`: verify `CONSENSUS_API_KEY` and try `CONSENSUS_AUTH_MODE=auto`.
+- Remote OAuth requirement: protect the MCP endpoint with a gateway or resource-server layer.

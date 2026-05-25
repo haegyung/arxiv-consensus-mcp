@@ -35,9 +35,19 @@ Use this server when you want an MCP client or agent to:
 
 ## Quick Start
 
-Create a virtual environment and install the package in editable mode:
+Install directly from GitHub:
 
 ```bash
+python3 -m venv .venv
+. .venv/bin/activate
+pip install "git+https://github.com/haegyung/arxiv-consensus-mcp.git"
+```
+
+Or clone the repository and install in editable mode:
+
+```bash
+git clone https://github.com/haegyung/arxiv-consensus-mcp.git
+cd arxiv-consensus-mcp
 python3 -m venv .venv
 . .venv/bin/activate
 pip install -e .
@@ -163,12 +173,25 @@ Expected output:
 True Arxiv_Consensus_MCP stdio
 ```
 
+Run the local unit tests:
+
+```bash
+python -m unittest discover -s tests
+```
+
 ## Current Limitations
 
 - Consensus search requires a valid Consensus API key.
 - Only the documented Consensus `/v1/quick_search` endpoint is enabled by default.
 - `consensus_request` can call other paths only when `CONSENSUS_ALLOW_UNDOCUMENTED=1` or `allow_undocumented=true` is explicitly set.
 - Remote OAuth enforcement is not implemented inside the local stdio adapter; it belongs to the deployment gateway/resource-server layer.
+
+## Troubleshooting
+
+- If the MCP client cannot start the server, verify that the client command points to the virtualenv Python that installed this package.
+- If arXiv requests fail, retry with the default endpoint list and check local network access to `export.arxiv.org`.
+- If Consensus returns `401` or `403`, check `CONSENSUS_API_KEY` and try `CONSENSUS_AUTH_MODE=auto`, `x-api-key`, or `bearer`.
+- If remote clients need OAuth, put the server behind a gateway/resource-server layer instead of forwarding user OAuth tokens to Consensus.
 
 ## License
 
