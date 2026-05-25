@@ -4,6 +4,8 @@
 
 It is designed for agents that collect papers, compare research sources, build corpus-ingestion queues, or prepare literature-review material without mixing client OAuth concerns with backend API-key handling.
 
+한국어 안내는 [시작하기 (한국어)](docs/getting-started.ko.md)를 참고하세요. 아래에도 빠른 설치와 인증 경계를 함께 적어 두었습니다.
+
 ## What It Does
 
 - Searches the public arXiv Atom API without an API key.
@@ -73,6 +75,44 @@ CONSENSUS_AUTH_MODE=x-api-key \
 python -m arxiv_consensus_mcp.server
 ```
 
+## 한국어 빠른 안내
+
+`arxiv-consensus-mcp`는 arXiv 공개 메타데이터와 Consensus API 검색 결과를 한 번에 가져와 같은 필드 구조로 정리해 주는 MCP 서버입니다.
+
+- arXiv 검색은 API 키 없이 바로 사용할 수 있습니다.
+- Consensus 검색은 서버 실행 환경에 `CONSENSUS_API_KEY`를 넣었을 때 함께 동작합니다.
+- 사용자 OAuth 토큰은 Consensus API로 넘기지 않습니다. 원격으로 배포할 때 OAuth가 필요하면 MCP 서버 앞단의 gateway 또는 resource-server 계층에서 검사합니다.
+
+GitHub에서 바로 설치하려면:
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+pip install "git+https://github.com/haegyung/arxiv-consensus-mcp.git"
+```
+
+로컬 MCP 클라이언트에 등록하려면:
+
+```bash
+codex mcp add arxiv-consensus -- /absolute/path/to/.venv/bin/python -m arxiv_consensus_mcp.server
+```
+
+Consensus까지 함께 쓰려면 서버를 실행할 때 backend API 키를 환경 변수로 전달합니다:
+
+```bash
+CONSENSUS_API_KEY="replace-with-your-key" \
+CONSENSUS_AUTH_MODE=auto \
+python -m arxiv_consensus_mcp.server
+```
+
+처음에는 MCP 클라이언트에서 다음처럼 확인하면 됩니다:
+
+```text
+Call arxiv_consensus_surface and summarize the available tools.
+```
+
+자세한 한국어 설치 절차와 문제 해결은 [docs/getting-started.ko.md](docs/getting-started.ko.md)에 있습니다.
+
 ## Example Prompts
 
 After registering the server, ask your MCP client for tasks like:
@@ -116,6 +156,7 @@ The combined tools return a corpus-ingestion-friendly record shape:
 ## Documentation
 
 - [Getting started](docs/getting-started.md): install, run, register, and make first calls.
+- [시작하기 (한국어)](docs/getting-started.ko.md): 한국어 설치, 실행, 등록, 첫 호출 안내.
 - [Tool reference](docs/tool-reference.md): tool inputs, outputs, and behavior.
 - [Configuration](docs/configuration.md): environment variables and auth modes.
 - [OAuth gateway boundary](docs/oauth-gateway-boundary.md): how to protect a remote MCP deployment.
