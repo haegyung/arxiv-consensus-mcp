@@ -17,4 +17,6 @@
 
 ## Current Gate
 
-This package is a local sanitized release candidate. Public push/repository creation is intentionally not performed here.
+This package is the sanitized public source for `https://github.com/haegyung/arxiv-consensus-mcp`.
+
+Publish only this package tree. Do not publish the full local workspace, generated run archives, raw setup notes, private runtime state, or machine-local paths.
