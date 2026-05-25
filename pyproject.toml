@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "arxiv-consensus-mcp"
-version = "0.1.0"
+version = "0.1.1"
 description = "MCP server for normalized arXiv metadata search and Consensus API search."
 readme = "README.md"
 requires-python = ">=3.10"
